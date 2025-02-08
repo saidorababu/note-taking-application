@@ -10,9 +10,9 @@ const API_URL = 'http://localhost:5000'; // Replace with your API endpoint
 
 export default function Home() {
   const { user } = useAuth();
-  const [notes, setNotes] = useState([]);
+  const [notes, setNotes] = useState<{ _id: string; title: string; content: string; created_at: string; is_favorite: boolean; image_url?: string; audio_url?: string; }[]>([]);
   const [isEditorOpen, setIsEditorOpen] = useState(false);
-  const [editingNote, setEditingNote] = useState(null);
+  const [editingNote, setEditingNote] = useState<{ _id: string; user_id: string; title: string; content: string; image_url?: string; audio_url?: string; is_favorite: boolean; } | undefined>(undefined);
   const [searchQuery, setSearchQuery] = useState('');
   const [sortOrder, setSortOrder] = useState('desc');
   const [showSortOptions, setShowSortOptions] = useState(false);
@@ -32,7 +32,15 @@ export default function Home() {
       if (!response.ok) throw new Error('Error fetching notes');
       const data = await response.json();
       console.log(data);
-      setNotes(data);
+      setNotes(data.map((note: any) => ({
+        id: note._id,
+        title: note.title,
+        content: note.content,
+        created_at: note.created_at,
+        is_favorite: note.is_favorite,
+        image_url: note.image_url,
+        audio_url: note.audio_url,
+      })));
     } catch (error) {
       toast.error('Error fetching notes');
       console.error('Error:', error);
@@ -41,7 +49,7 @@ export default function Home() {
     }
   };
 
-  const handleDeleteNote = async (id) => {
+  const handleDeleteNote = async (id: any) => {
     try {
       const response = await fetch(`${API_URL}/notes/${id}`, {
         method: 'DELETE',
@@ -55,7 +63,7 @@ export default function Home() {
     }
   };
 
-  const handleToggleFavorite = async (note_id) => {
+  const handleToggleFavorite = async (note_id:any) => {
     try {
       const response = await fetch(`${API_URL}/notes/${user.id}/${note_id}`, {
         method: 'PATCH',
@@ -172,7 +180,7 @@ export default function Home() {
       <div className="fixed bottom-4 right-4">
         <button
           onClick={() => {
-            setEditingNote(null);
+            setEditingNote(undefined);
             setIsEditorOpen(true);
           }}
           className="inline-flex items-center px-6 py-3 border border-transparent rounded-full shadow-lg text-sm font-medium text-white bg-blue-600 hover:bg-blue-700"
@@ -186,7 +194,7 @@ export default function Home() {
         isOpen={isEditorOpen}
         onClose={() => {
           setIsEditorOpen(false);
-          setEditingNote(null);
+          setEditingNote(undefined);
         }}
         initialNote={editingNote}
         fetchNotes={fetchNotes}

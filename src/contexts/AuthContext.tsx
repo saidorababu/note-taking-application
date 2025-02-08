@@ -69,7 +69,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const data = await response.json();
 
       if (data.imageUrl) {
-        setUser((prevUser) => ({ ...prevUser, profileImage: data.imageUrl }));
+        setUser((prevUser:any) => ({ ...prevUser, profileImage: data.imageUrl }));
       }
 
       return data.imageUrl;

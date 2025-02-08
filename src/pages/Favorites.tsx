@@ -8,7 +8,7 @@ const API_URL = 'http://localhost:5000'; // Replace with your API endpoint
 
 export default function Favorites() {
   const { user } = useAuth();
-  const [notes, setNotes] = useState([]);
+  const [notes, setNotes] = useState<Array<{ _id: string; title: string; content: string; created_at: string; is_favorite: boolean; image_url?: string; audio_url?: string }>>([]);
   const [isEditorOpen, setIsEditorOpen] = useState(false);
   const [editingNote, setEditingNote] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -31,49 +31,49 @@ export default function Favorites() {
     }
   };
 
-  const handleSaveNote = async (noteData) => {
-    const { title, content, image } = noteData;
+  // const handleSaveNote = async (noteData :any) => {
+  //   const { title, content, image } = noteData;
 
-    try {
-      let imageUrl = null;
+  //   try {
+  //     let imageUrl = null;
 
-      if (image) {
-        const formData = new FormData();
-        formData.append('file', image);
-        const uploadResponse = await fetch(`${API_URL}/upload`, {
-          method: 'POST',
-          body: formData,
-        });
-        if (!uploadResponse.ok) throw new Error('Error uploading image');
-        const uploadData = await uploadResponse.json();
-        imageUrl = uploadData.publicUrl;
-      }
+  //     if (image) {
+  //       const formData = new FormData();
+  //       formData.append('file', image);
+  //       const uploadResponse = await fetch(`${API_URL}/upload`, {
+  //         method: 'POST',
+  //         body: formData,
+  //       });
+  //       if (!uploadResponse.ok) throw new Error('Error uploading image');
+  //       const uploadData = await uploadResponse.json();
+  //       imageUrl = uploadData.publicUrl;
+  //     }
 
-      const notePayload = {
-        title,
-        content,
-        image_url: imageUrl || editingNote?.image_url,
-      };
+  //     const notePayload = {
+  //       title,
+  //       content,
+  //       image_url: imageUrl || editingNote?.image_url,
+  //     };
 
-      const response = await fetch(`${API_URL}/notes/${editingNote.id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(notePayload),
-      });
+  //     const response = await fetch(`${API_URL}/notes/${editingNote.id}`, {
+  //       method: 'PUT',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify(notePayload),
+  //     });
 
-      if (!response.ok) throw new Error('Error saving note');
+  //     if (!response.ok) throw new Error('Error saving note');
 
-      toast.success('Note updated successfully');
-      fetchFavorites();
-    } catch (error) {
-      toast.error('Error saving note');
-      console.error('Error:', error);
-    }
-  };
+  //     toast.success('Note updated successfully');
+  //     fetchFavorites();
+  //   } catch (error) {
+  //     toast.error('Error saving note');
+  //     console.error('Error:', error);
+  //   }
+  // };
 
-  const handleDeleteNote = async (id) => {
+  const handleDeleteNote = async (id:any) => {
     try {
       const response = await fetch(`${API_URL}/notes/${id}`, {
         method: 'DELETE',
@@ -87,7 +87,7 @@ export default function Favorites() {
     }
   };
 
-  const handleToggleFavorite = async (id, isFavorite) => {
+  const handleToggleFavorite = async (id:any, isFavorite:any) => {
     try {
       const response = await fetch(`${API_URL}/notes/${id}`, {
         method: 'PATCH',
@@ -143,8 +143,8 @@ export default function Favorites() {
           setIsEditorOpen(false);
           setEditingNote(null);
         }}
-        onSave={handleSaveNote}
-        initialNote={editingNote}
+        initialNote={editingNote || undefined}
+        fetchNotes={fetchFavorites}
       />
     </div>
   );

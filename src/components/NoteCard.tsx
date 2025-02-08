@@ -14,7 +14,7 @@ import { Dialog } from '@headlessui/react';
 
 interface NoteCardProps {
   note: {
-    id: string;
+    _id: string;
     title: string;
     content: string;
     created_at: string;
@@ -76,18 +76,22 @@ export default function NoteCard({
           <button
             onClick={handleCopy}
             className="text-gray-400 hover:text-blue-500"
+            title="Copy to clipboard"
           >
             <ClipboardDocumentIcon className="h-5 w-5" />
           </button>
           <button
             onClick={() => onEdit(note)}
             className="text-gray-400 hover:text-green-500"
+            title="Edit note"
           >
+          
             <PencilIcon className="h-5 w-5" />
           </button>
           <button
             onClick={() => onDelete(note._id)}
             className="text-gray-400 hover:text-red-500"
+            title="Delete note"
           >
             <TrashIcon className="h-5 w-5" />
           </button>
@@ -133,6 +137,7 @@ export default function NoteCard({
             <button
               onClick={toggleModal}
               className="absolute top-0 right-0 m-4 text-gray-400 hover:text-gray-600"
+              title = "Close"
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
