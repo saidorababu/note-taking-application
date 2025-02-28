@@ -9,7 +9,7 @@ declare global {
   }
 }
 import { Dialog } from "@headlessui/react";
-import { toast } from "react-hot-toast";
+// import { toast } from "react-hot-toast";
 import {
   MicrophoneIcon,
   PaperAirplaneIcon,
@@ -76,9 +76,7 @@ export default function NoteEditor({
 
   const {user} = useAuth();
 
-  useEffect(() => {
-    console.log(initialNote);
-  });
+  
 
 
   // Play sound function
@@ -88,81 +86,181 @@ export default function NoteEditor({
   };
   
 
+  // // Initialize speech recognition
+  // const initializeSpeechRecognition = () => {
+
+  //   if (!window.SpeechRecognition && !window.webkitSpeechRecognition) {
+  //     toast.error("Speech Recognition is not supported in this browser.");
+  //     return;
+  //   }
+  //   const SpeechRecognition =
+  //     window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  //   console.log(SpeechRecognition);
+  //   if (SpeechRecognition) {
+  //     console.log("Speech recognition supported");
+  //     recognition.current = new SpeechRecognition();
+  //     recognition.current.continuous = true;
+  //     recognition.current.interimResults = true;
+  //     recognition.current.lang = "en-US";
+
+  //     console.log("Recognition:", recognition.current);
+
+  //     recognition.current.onstart = () => {
+  //       console.log("Speech recognition started");
+  //     };
+
+  //     recognition.current.onend = () => {
+  //       console.log("Speech recognition ended");
+  //     };
+
+  //     recognition.current.onresult = (event: any) => {
+  //       let finalTranscript = "";
+  //       console.log("onresult event triggered");
+  //       // for (let i = event.resultIndex; i < event.results.length; i++) {
+  //       //   if (event.results[i].isFinal) {
+  //       //     finalTranscript += event.results[i][0].transcript;
+  //       //   }
+  //       // }
+  //       // console.log(finalTranscript);
+  //       // setContent((prev) => prev + " " + finalTranscript);
+  //     };
+
+  //     recognition.current.onerror = (event: any) => {
+  //       console.error("Speech recognition error:", event.error);
+  //       setIsRecording(false);
+  //     };
+  //   }
+  // };
+
+  // // Toggle voice recording
+  // const toggleRecording = async () => {
+  //   if (!isRecording) {
+  //     // playSound("/audio/start.mp3");
+  //     // Start both voice-to-text and audio recording
+
+  //     if(!recognition.current) initializeSpeechRecognition();
+
+  //     recognition.current?.start();
+
+  //     // Start Audio Recording
+  //     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+  //     mediaRecorder.current = new MediaRecorder(stream);
+  //     audioChunks.current = [];
+
+  //     mediaRecorder.current.ondataavailable = (event) => {
+  //       audioChunks.current.push(event.data);
+  //     };
+
+  //     mediaRecorder.current.onstop = () => {
+  //       // playSound("/audio/start.mp3");
+  //       const audioBlob = new Blob(audioChunks.current, { type: "audio/wav" });
+  //       const audioUrl = URL.createObjectURL(audioBlob);
+  //       setRecordedAudio(audioUrl);
+  //       setAudioBlob(audioBlob);
+  //       audioChunks.current = []; // Reset chunks
+  //     };
+
+  //     mediaRecorder.current.start();
+  //     setIsRecording(true);
+
+  //     // Start Timer
+  //     setRecordingTime(0);
+  //     // timerRef.current = setInterval(() => {
+  //     //   setRecordingTime((prev) => prev + 1);
+  //     // }, 1000);
+  //   } else {
+  //     // Stop both speech recognition and audio recording
+  //     recognition.current?.stop();
+  //     mediaRecorder.current?.stop();
+  //     setIsRecording(false);
+  //     // Stop Timer
+  //     // if (timerRef.current) {
+  //     //   clearInterval(timerRef.current);
+  //     // }
+  //   }
+  // };
+
   // Initialize speech recognition
-  const initializeSpeechRecognition = () => {
-    const SpeechRecognition =
-      window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (SpeechRecognition) {
-      recognition.current = new SpeechRecognition();
-      recognition.current.continuous = true;
-      recognition.current.interimResults = true;
+const initializeSpeechRecognition = () => {
+  if (!window.SpeechRecognition && !window.webkitSpeechRecognition) {
+    // toast.error("Speech Recognition is not supported in this browser.");
+    return;
+  }
 
-      recognition.current.onresult = (event: any) => {
-        let finalTranscript = "";
+  const SpeechRecognition =
+    window.SpeechRecognition || window.webkitSpeechRecognition;
+  
+  recognition.current = new SpeechRecognition();
+  recognition.current.continuous = true;
+  recognition.current.interimResults = true;
+  recognition.current.lang = "en-US";
 
-        for (let i = event.resultIndex; i < event.results.length; i++) {
-          if (event.results[i].isFinal) {
-            finalTranscript += event.results[i][0].transcript;
-          }
-        }
-
-        setContent((prev) => prev + " " + finalTranscript);
-      };
-
-      recognition.current.onerror = (event: any) => {
-        console.error("Speech recognition error:", event.error);
-        setIsRecording(false);
-      };
-    }
+  recognition.current.onstart = () => {
+    console.log("Speech recognition started");
   };
 
-  // Toggle voice recording
-  const toggleRecording = async () => {
-    if (!isRecording) {
-      playSound("/audio/start.mp3");
-      // Start both voice-to-text and audio recording
-      if (!recognition.current) {
-        initializeSpeechRecognition();
-      }
-      recognition.current?.start();
+  recognition.current.onend = () => {
+    console.log("Speech recognition ended");
+    setIsRecording(false);
+  };
 
-      // Start Audio Recording
+  recognition.current.onresult = (event: any) => {
+    let transcript = "";
+    for (let i = event.resultIndex; i < event.results.length; i++) {
+      if (event.results[i].isFinal) {
+        transcript += event.results[i][0].transcript + " ";
+      }
+    }
+    setContent((prev) => prev + transcript);
+  };
+
+  recognition.current.onerror = (event: any) => {
+    console.error("Speech recognition error:", event.error);
+    setIsRecording(false);
+  };
+};
+
+// Toggle voice recording
+const toggleRecording = async () => {
+  if (!isRecording) {
+    // Start speech recognition
+    if (!recognition.current) initializeSpeechRecognition();
+    recognition.current?.start();
+
+    // Start audio recording
+    try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       mediaRecorder.current = new MediaRecorder(stream);
       audioChunks.current = [];
 
       mediaRecorder.current.ondataavailable = (event) => {
+        console.log("Data available");
         audioChunks.current.push(event.data);
       };
 
       mediaRecorder.current.onstop = () => {
-        playSound("/audio/start.mp3");
         const audioBlob = new Blob(audioChunks.current, { type: "audio/wav" });
         const audioUrl = URL.createObjectURL(audioBlob);
         setRecordedAudio(audioUrl);
         setAudioBlob(audioBlob);
-        audioChunks.current = []; // Reset chunks
+        audioChunks.current = [];
       };
 
       mediaRecorder.current.start();
       setIsRecording(true);
-
-      // Start Timer
-      setRecordingTime(0);
-      timerRef.current = setInterval(() => {
-        setRecordingTime((prev) => prev + 1);
-      }, 1000);
-    } else {
-      // Stop both speech recognition and audio recording
-      recognition.current?.stop();
-      mediaRecorder.current?.stop();
-      setIsRecording(false);
-      // Stop Timer
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
-      }
+    } catch (error) {
+      console.error("Error accessing microphone:", error);
+      // toast.error("Microphone access denied.");
     }
-  };
+  } else {
+    // Stop both speech recognition and audio recording
+    recognition.current?.stop();
+    mediaRecorder.current?.stop();
+    setIsRecording(false);
+  }
+};
+
 
   // Handle image selection
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -207,11 +305,11 @@ export default function NoteEditor({
       }
 
       const data = await response.json();
-      toast.success("Note saved successfully!");
+      // toast.success("Note saved successfully!");
       fetchNotes()
       onClose();
     } catch (error) {
-      toast.error("Failed to save note.");
+      // toast.error("Failed to save note.");
       console.error(error);
     }
 

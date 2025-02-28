@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext";
-import { toast } from "react-hot-toast";
+// import { toast } from "react-hot-toast";
 
 const API_URL = 'http://localhost:5000';
 
@@ -40,7 +40,7 @@ export default function Profile() {
   // ✅ Handle image upload
   const handleImageUpload = async () => {
     if (!image) {
-      toast.error("Please select an image first.");
+      // toast.error("Please select an image first.");
       return;
     }
 
@@ -52,10 +52,10 @@ export default function Profile() {
       const imageUrl = await updateProfileImage(formData);
       if (imageUrl) {
         setPreview(imageUrl);
-        toast.success("Profile picture updated successfully!");
+        // toast.success("Profile picture updated successfully!");
       }
     } catch (error) {
-      toast.error("Error uploading image");
+      // toast.error("Error uploading image");
       console.error(error);
     }
   };
@@ -64,17 +64,17 @@ export default function Profile() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (newPassword !== confirmPassword) {
-      toast.error("Passwords do not match");
+      // toast.error("Passwords do not match");
       return;
     }
 
     try {
       await updatePassword(newPassword);
-      toast.success("Password updated successfully");
+      // toast.success("Password updated successfully");
       setNewPassword("");
       setConfirmPassword("");
     } catch (error) {
-      toast.error("Error updating password");
+      // toast.error("Error updating password");
       console.error(error);
     }
   };
@@ -97,6 +97,7 @@ export default function Profile() {
             accept="image/*"
             onChange={handleImageChange}
             className="mt-3"
+            placeholder="Select an image"
           />
           <button
             onClick={handleImageUpload}

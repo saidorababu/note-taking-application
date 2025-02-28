@@ -9,7 +9,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { StarIcon as StarIconSolid } from '@heroicons/react/24/solid';
 import { format } from 'date-fns';
-import { toast } from 'react-hot-toast';
+// import { toast } from 'react-hot-toast';
 import { Dialog } from '@headlessui/react';
 
 interface NoteCardProps {
@@ -55,7 +55,7 @@ export default function NoteCard({
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(note.content);
-    toast.success('Copied to clipboard!');
+    // toast.success('Copied to clipboard!');
   };
 
   return (

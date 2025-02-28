@@ -1,6 +1,6 @@
 // import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { Toaster } from 'react-hot-toast';
+// import { Toaster } from 'react-hot-toast';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import Layout from './components/Layout';
 import Home from './pages/Home';
@@ -23,7 +23,7 @@ function App() {
   return (
     <Router>
       <AuthProvider>
-        <Toaster position="top-right" />
+        {/* <Toaster position="top-right" /> */}
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />

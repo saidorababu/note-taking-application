@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { toast } from 'react-hot-toast';
+// import { toast } from 'react-hot-toast';
 
 export default function SignUp() {
   const [email, setEmail] = useState('');
@@ -14,16 +14,16 @@ export default function SignUp() {
     e.preventDefault();
 
     if (password !== confirmPassword) {
-      toast.error('Passwords do not match');
+      // toast.error('Passwords do not match');
       return;
     }
 
     try {
       await signUp(email, password);
-      toast.success('Account created successfully');
+      // toast.success('Account created successfully');
       navigate('/login');
     } catch (error) {
-      toast.error('Error creating account');
+      // toast.error('Error creating account');
       console.error('Error:', error);
     }
   };

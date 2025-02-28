@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import NoteCard from '../components/NoteCard';
 import NoteEditor from '../components/NoteEditor';
-import { toast } from 'react-hot-toast';
+// import { toast } from 'react-hot-toast';
 
 const API_URL = 'http://localhost:5000'; // Replace with your API endpoint
 
@@ -26,7 +26,7 @@ export default function Favorites() {
       const data = await response.json();
       setNotes(data);
     } catch (error) {
-      toast.error('Error fetching favorites');
+      // toast.error('Error fetching favorites');
       console.error('Error:', error);
     }
   };
@@ -79,10 +79,10 @@ export default function Favorites() {
         method: 'DELETE',
       });
       if (!response.ok) throw new Error('Error deleting note');
-      toast.success('Note deleted successfully');
+      // toast.success('Note deleted successfully');
       fetchFavorites();
     } catch (error) {
-      toast.error('Error deleting note');
+      // toast.error('Error deleting note');
       console.error('Error:', error);
     }
   };
@@ -99,7 +99,7 @@ export default function Favorites() {
       if (!response.ok) throw new Error('Error updating favorite status');
       fetchFavorites();
     } catch (error) {
-      toast.error('Error updating favorite status');
+      // toast.error('Error updating favorite status');
       console.error('Error:', error);
     }
   };

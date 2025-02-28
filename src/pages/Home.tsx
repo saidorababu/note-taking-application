@@ -4,7 +4,7 @@ import NoteCard from '../components/NoteCard';
 import NoteEditor from '../components/NoteEditor';
 import { PlusIcon } from '@heroicons/react/24/outline';
 import { HiAdjustmentsHorizontal } from "react-icons/hi2";
-import { toast } from 'react-hot-toast';
+// import { toast } from 'react-hot-toast';
 
 const API_URL = 'http://localhost:5000'; // Replace with your API endpoint
 
@@ -42,7 +42,7 @@ export default function Home() {
         audio_url: note.audio_url,
       })));
     } catch (error) {
-      toast.error('Error fetching notes');
+      // toast.error('Error fetching notes');
       console.error('Error:', error);
     } finally {
       setLoading(false); // ✅ Stop loading after fetching
@@ -55,10 +55,10 @@ export default function Home() {
         method: 'DELETE',
       });
       if (!response.ok) throw new Error('Error deleting note');
-      toast.success('Note deleted successfully');
+      // toast.success('Note deleted successfully');
       fetchNotes();
     } catch (error) {
-      toast.error('Error deleting note');
+      // toast.error('Error deleting note');
       console.error('Error:', error);
     }
   };
@@ -74,7 +74,7 @@ export default function Home() {
       if (!response.ok) throw new Error('Error updating favorite status');
       fetchNotes();
     } catch (error) {
-      toast.error('Error updating favorite status');
+      // toast.error('Error updating favorite status');
       console.error('Error:', error);
     }
   };
